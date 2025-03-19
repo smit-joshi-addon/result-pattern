@@ -33,11 +33,12 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Publish to GitHub Packages
-        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn deploy -DskipTests -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/smit-joshi-addon/result-pattern
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
+        if: ${{ !contains(env.VERSION, '-SNAPSHOT') }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.VERSION }}

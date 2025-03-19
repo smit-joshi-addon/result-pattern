@@ -7,7 +7,7 @@
 
   <groupId>com.smit.result</groupId>
   <artifactId>result-pattern</artifactId>
-  <version>1.0</version>
+  <version>1.0.1-SNAPSHOT</version>
 
   <name>result-pattern</name>
   <!-- FIXME change it to the project's website -->
@@ -48,12 +48,17 @@
     </plugins>
   </build>
 
-  <distributionManagement>
+ <distributionManagement>
+    <snapshotRepository>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/smit-joshi-addon/result-pattern</url>
+    </snapshotRepository>
     <repository>
         <id>github</id>
         <url>https://maven.pkg.github.com/smit-joshi-addon/result-pattern</url>
     </repository>
 </distributionManagement>
+
 
 
 </project>
