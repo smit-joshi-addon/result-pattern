@@ -6,42 +6,47 @@ import com.smit.result.constants.ResultConstants;
 import java.util.ServiceLoader;
 
 public class ResultConstantsProvider {
-   private static ResultConstants INSTANCE = loadResultConstants();
+    private static ResultConstants INSTANCE;
 
-   public ResultConstantsProvider() {
-   }
+    static {
+        INSTANCE = loadResultConstants();
+    }
 
-   private static ResultConstants loadResultConstants() {
-      // First, try loading via Spring if running in a Spring Boot app
-      ResultConstants springBean = getSpringBeanIfAvailable();
-      if (springBean != null) {
-         return springBean;
-      }
+    // Private constructor to prevent instantiation
+    private ResultConstantsProvider() {
+    }
 
-      // Otherwise, fallback to normal ServiceLoader behavior
-      ServiceLoader<ResultConstants> loader = ServiceLoader.load(ResultConstants.class);
-      return loader.findFirst().orElse(new DefaultResultConstants());
-   }
+    // Load ResultConstants from Spring if available, else fallback to ServiceLoader
+    private static ResultConstants loadResultConstants() {
+        // First, try loading via Spring if running in a Spring Boot app
+        ResultConstants springBean = getSpringBeanIfAvailable();
+        if (springBean != null) {
+            return springBean;
+        }
 
-   public static ResultConstants getInstance() {
-      return INSTANCE;
-   }
+        // Otherwise, fallback to normal ServiceLoader behavior
+        ServiceLoader<ResultConstants> loader = ServiceLoader.load(ResultConstants.class);
+        return loader.findFirst().orElse(new DefaultResultConstants());
+    }
 
-   // Try to detect if Spring is available and fetch ResultConstants bean
-   private static ResultConstants getSpringBeanIfAvailable() {
-      try {
-         // Check if Spring is available at runtime by loading Spring context class
-         Class<?> springContextClass = Class.forName("org.springframework.context.ApplicationContext");
-         Object context = springContextClass.getMethod("getInstance").invoke(null);
-         if (context != null) {
-            // Fetch the Spring bean for ResultConstants
-            return (ResultConstants) springContextClass
-                .getMethod("getBean", Class.class)
-                .invoke(context, ResultConstants.class);
-         }
-      } catch (Exception e) {
-         // Spring is not available, ignore and return null
-      }
-      return null;
-   }
+    // Get instance method for the ResultConstants
+    public static ResultConstants getInstance() {
+        return INSTANCE;
+    }
+
+    // Attempt to get Spring bean if Spring context is available
+    private static ResultConstants getSpringBeanIfAvailable() {
+        try {
+            // Check if Spring is available by looking for the ApplicationContext class
+            Class<?> springContextClass = Class.forName("org.springframework.context.ApplicationContext");
+            Object context = springContextClass.getMethod("getBean", String.class).invoke(null, "resultConstants");
+
+            if (context != null) {
+                return (ResultConstants) context;
+            }
+        } catch (Exception e) {
+            // Ignore exceptions if Spring context isn't available
+        }
+        return null;
+    }
 }
