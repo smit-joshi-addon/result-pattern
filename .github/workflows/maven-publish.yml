@@ -17,6 +17,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
 
       - name: Publish to GitHub Packages
         run: mvn clean deploy
