@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages
+name: Publish and Release
 
 on:
   push:
@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-        contents: read
-        packages: write
-        
+      contents: write   # Needed for creating releases
+      packages: write   # Needed for publishing to GitHub Packages
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,11 +25,25 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
 
+      - name: Extract Version from pom.xml
+        id: get_version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-        
-      - name: Publish to GitHub Packages Apache Maven
+
+      - name: Publish to GitHub Packages
         run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
         env:
-            GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: target/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
