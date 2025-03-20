@@ -14,7 +14,7 @@ public class CustomResult<T> extends ResultBase {
     public CustomResult(T data) {
         super(true, null);
         this.data = data;
-        this.message = ResultConstantsProvider.getInstance().getSuccessMessage();
+        this.message = ResultConstantsProvider.getResultConstants().getSuccessMessage();
     }
 
     public CustomResult(T data, String message) {

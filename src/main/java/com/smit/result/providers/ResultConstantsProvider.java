@@ -30,12 +30,12 @@ public class ResultConstantsProvider {
     }
 
     // Get instance method for the ResultConstants
-    public static ResultConstants getInstance() {
+    public static ResultConstants getResultConstants() {
         return INSTANCE;
     }
 
     // Method to set the instance manually
-    public static void setInstance(ResultConstants constants) {
+    public static void setResultConstants(ResultConstants constants) {
         if (constants == null) {
             throw new IllegalArgumentException("ResultConstants instance cannot be null");
         }
