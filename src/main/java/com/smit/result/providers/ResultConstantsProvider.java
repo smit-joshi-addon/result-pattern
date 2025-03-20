@@ -34,6 +34,14 @@ public class ResultConstantsProvider {
         return INSTANCE;
     }
 
+    // Method to set the instance manually
+    public static void setInstance(ResultConstants constants) {
+        if (constants == null) {
+            throw new IllegalArgumentException("ResultConstants instance cannot be null");
+        }
+        INSTANCE = constants;
+    }
+
     // Attempt to get Spring bean if Spring context is available
     private static ResultConstants getSpringBeanIfAvailable() {
         try {
