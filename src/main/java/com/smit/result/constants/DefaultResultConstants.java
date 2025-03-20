@@ -9,7 +9,7 @@ public class DefaultResultConstants implements ResultConstants {
 
     @Override
     public String getErrorMessage(String errorDetail) {
-        return "An error occurred: ";
+        return "An error occurred: "+errorDetail;
     }
 
 }
