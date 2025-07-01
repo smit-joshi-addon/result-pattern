@@ -4,18 +4,18 @@ import com.smit.result.errors.Error;
 
 public class ResultBase {
     private boolean success;
-    private Error exception;
+    private Error error;
 
     public ResultBase(boolean success, Error error) {
         this.success = success;
-        this.exception = error;
+        this.error = error;
     }
 
     public boolean isSuccess() {
         return success;
     }
 
-    public Error getException() {
-        return exception;
+    public Error getError() {
+        return error;
     }
 }

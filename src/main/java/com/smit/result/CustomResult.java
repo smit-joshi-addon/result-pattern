@@ -82,6 +82,6 @@ public class CustomResult<T> extends ResultBase {
         if (isSuccess() && data != null) {
             return CustomResult.success(mapper.apply(data));
         }
-        return new CustomResult<>(isSuccess(), getException());
+        return new CustomResult<>(isSuccess(), getError());
     }
 }
